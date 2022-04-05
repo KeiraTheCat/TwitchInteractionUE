@@ -226,7 +226,7 @@ FHttpRequestHandler FWebUtil::CreateHandler(const FHttpResponser& HttpResponser)
 {
 	return [HttpResponser](const FHttpServerRequest& Request, const FHttpResultCallback& OnComplete)
 	{
-		auto Response = HttpResponser(Request);
+		TUniquePtr<FHttpServerResponse> Response = HttpResponser(Request);
 		if (Response == nullptr)
 		{
 			return false;

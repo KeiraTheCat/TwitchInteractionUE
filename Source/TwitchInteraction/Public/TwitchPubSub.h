@@ -414,10 +414,6 @@ public:
 	UPROPERTY()
 		FString type;
 	UPROPERTY()
-		FString nonce;
-	UPROPERTY()
-		FString error;
-	UPROPERTY()
 		FTwitchMessageData data;
 };
 

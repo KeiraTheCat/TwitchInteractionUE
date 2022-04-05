@@ -169,7 +169,7 @@ void UTwitchPubSub::ProcessMessage(const FString _jsonStr)
 	//Fix twitch broken json strings
 	FString fixedStr = _jsonStr.Replace(TEXT("\"{"), TEXT("{"));
 	fixedStr = fixedStr.Replace(TEXT("}\""), TEXT("}"));
-
+	//FString fixedStr = _jsonStr;
 	UE_LOG(LogTemp, Warning, TEXT("RECV - %s"),*_jsonStr);
 	UE_LOG(LogTemp, Warning, TEXT("RECVF - %s"), *fixedStr);
 
@@ -177,7 +177,11 @@ void UTwitchPubSub::ProcessMessage(const FString _jsonStr)
 	{
 		//ERROR
 		UE_LOG(LogTemp, Warning, TEXT("Deserialize Error : %s"), *fixedStr);
+	}else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Success?!"));
 	}
+
 
 	if (targetMessage.type == "PONG")
 	{
@@ -212,13 +216,17 @@ void UTwitchPubSub::ProcessMessage(const FString _jsonStr)
 			FJsonObjectConverter::JsonObjectStringToUStruct(fixedStr, &twitchSubscribeMessage, 0, 0);
 			OnSubscribeEventReceived.Broadcast(twitchSubscribeMessage.data.message);
 		}
+		if (targetMessage.data.topic.StartsWith("channel-points-channel-v1"))
+        	{
+        		FTwitchEventRedeemRoot twitchRedeemMessage;
+        		if(!FJsonObjectConverter::JsonObjectStringToUStruct(fixedStr, &twitchRedeemMessage, 0, 0))
+        		{
+        		UE_LOG(LogTemp, Warning, TEXT("Deserialize Error : %s"), *fixedStr);
+        		}
+        		OnRedeemEventReceived.Broadcast(twitchRedeemMessage.data.data);
+        	}
 	}
 
-	if (targetMessage.type == "reward-redeemed")
-	{
-		FTwitchEventRedeemRoot twitchRedeemMessage;
-		FJsonObjectConverter::JsonObjectStringToUStruct(fixedStr, &twitchRedeemMessage, 0, 0);
-		OnRedeemEventReceived.Broadcast(twitchRedeemMessage.data.data);
-	}
+
 }
 
