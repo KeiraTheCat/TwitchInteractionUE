@@ -167,12 +167,11 @@ void UTwitchPubSub::ProcessMessage(const FString _jsonStr)
 	FTwitchMessage targetMessage;
 	
 	//Fix twitch broken json strings
-	FString fixedStr = _jsonStr.Replace(TEXT("\"{"), TEXT("{"));
-	fixedStr = fixedStr.Replace(TEXT("}\""), TEXT("}"));
-	//FString fixedStr = _jsonStr;
-	UE_LOG(LogTemp, Warning, TEXT("RECV - %s"),*_jsonStr);
+	//FString fixedStr = _jsonStr.Replace(TEXT("\"{"), TEXT("{"));
+	//fixedStr = fixedStr.Replace(TEXT("}\""), TEXT("}"));
+	//fixedStr = fixedStr.Replace(TEXT("\\\""), TEXT("\""));
+	FString fixedStr = _jsonStr;
 	UE_LOG(LogTemp, Warning, TEXT("RECVF - %s"), *fixedStr);
-
 	if (!FJsonObjectConverter::JsonObjectStringToUStruct(fixedStr, &targetMessage, 0, 0))
 	{
 		//ERROR
@@ -198,7 +197,10 @@ void UTwitchPubSub::ProcessMessage(const FString _jsonStr)
 		if (targetMessage.data.topic.StartsWith("channel-bits-events-v2"))
 		{
 			FTwitchEventBitsRoot twitchEventBitsMessage;
-			FJsonObjectConverter::JsonObjectStringToUStruct(fixedStr, &twitchEventBitsMessage, 0, 0);
+			FString fixBitsJson = fixedStr.Replace(TEXT("\"{"), TEXT("{"));
+            fixBitsJson = fixBitsJson.Replace(TEXT("}\""), TEXT("}"));
+            fixBitsJson = fixBitsJson.Replace(TEXT("\\\""), TEXT("\""));
+			FJsonObjectConverter::JsonObjectStringToUStruct(fixBitsJson, &twitchEventBitsMessage, 0, 0);
 			OnBitsEventReceived.Broadcast(twitchEventBitsMessage.data.message.data);
 		}
 
@@ -212,18 +214,22 @@ void UTwitchPubSub::ProcessMessage(const FString _jsonStr)
 
 		if (targetMessage.data.topic.StartsWith("channel-subscribe-events-v1"))
 		{
+		    FString fixSubJson = fixedStr.Replace(TEXT("\"{"), TEXT("{"));
+            fixSubJson = fixSubJson.Replace(TEXT("}\""), TEXT("}"));
+            fixSubJson = fixSubJson.Replace(TEXT("\\\""), TEXT("\""));
 			FTwitchEventSubscribe twitchSubscribeMessage;
-			FJsonObjectConverter::JsonObjectStringToUStruct(fixedStr, &twitchSubscribeMessage, 0, 0);
+			FJsonObjectConverter::JsonObjectStringToUStruct(fixSubJson, &twitchSubscribeMessage, 0, 0);
 			OnSubscribeEventReceived.Broadcast(twitchSubscribeMessage.data.message);
 		}
 		if (targetMessage.data.topic.StartsWith("channel-points-channel-v1"))
         	{
         		FTwitchEventRedeemRoot twitchRedeemMessage;
-        		if(!FJsonObjectConverter::JsonObjectStringToUStruct(fixedStr, &twitchRedeemMessage, 0, 0))
-        		{
-        		UE_LOG(LogTemp, Warning, TEXT("Deserialize Error : %s"), *fixedStr);
-        		}
-        		OnRedeemEventReceived.Broadcast(twitchRedeemMessage.data.data);
+        		FString fixRedeemJson = fixedStr.Replace(TEXT("\"{"), TEXT("{"));
+        		fixRedeemJson = fixRedeemJson.Replace(TEXT("}\""), TEXT("}"));
+        		fixRedeemJson = fixRedeemJson.Replace(TEXT("\\\""), TEXT("\""));
+        		UE_LOG(LogTemp, Warning, TEXT("Fixed Redeem - %s"), *fixRedeemJson);
+        		FJsonObjectConverter::JsonObjectStringToUStruct(fixRedeemJson, &twitchRedeemMessage, 0, 0);
+        		OnRedeemEventReceived.Broadcast(twitchRedeemMessage.data.message.data);
         	}
 	}
 

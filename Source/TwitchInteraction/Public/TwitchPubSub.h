@@ -42,9 +42,15 @@ struct FTwitchEventSubscribeMessage
 	GENERATED_USTRUCT_BODY()
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		FString channel_id;
+		FString user_name;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		FString channel_name;
+		FString display_name;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
+        FString channel_name;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
+        FString user_id;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
+		FString channel_id;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
 		FString time;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
@@ -52,11 +58,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
 		FString sub_plan_name;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		int32 months;
+		int32 cumulative_months;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
+    	int32 streak_months;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
 		FString context;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
 		bool is_gift;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
+    	FTwitchEventSubscribeDataMessage sub_message;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
 		FString recipient_id;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
@@ -64,21 +74,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
 		FString recipient_display_name;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		FString cumulative_months;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		FString streak_months;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
 		int32 multi_month_duration;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		FString display_name;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		FString user_name;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		FString user_id;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		FTwitchEventSubscribeDataMessage sub_message;
 };
 
 USTRUCT(BlueprintType)
@@ -115,29 +111,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
 		FString display_name;
 };
-
-USTRUCT(BlueprintType)
-struct FTwitchEventRedeemRedemption
-{
-	GENERATED_USTRUCT_BODY()
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		FString id;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		FTwitchEventRedeemRedemptionUser user;
-};
-
-USTRUCT(BlueprintType)
-struct FTwitchEventRedeemRewardMaxPreStream
-{
-	GENERATED_USTRUCT_BODY()
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		bool is_enabled;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		int32 max_per_stream;
-};
-
 USTRUCT(BlueprintType)
 struct FTwitchEventRedeemRewardImages
 {
@@ -151,6 +124,22 @@ public:
 		FString url_4x;
 };
 
+
+USTRUCT(BlueprintType)
+struct FTwitchEventRedeemRewardMaxPerStream
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
+		bool is_enabled;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
+		int32 max_per_stream;
+};
+
+
+
+
+
 USTRUCT(BlueprintType)
 struct FTwitchEventRedeemReward
 {
@@ -162,19 +151,14 @@ public:
 		FString channel_id;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
 		FString title;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
 		FString prompt;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
 		int32 cost;
-
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
 		bool is_user_input_required;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
 		bool is_sub_only;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
 		FTwitchEventRedeemRewardImages image;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
@@ -188,12 +172,26 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
 		bool is_in_stock;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		bool should_redemptions_skip_request_queue;
-
+        FTwitchEventRedeemRewardMaxPerStream max_per_stream;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		FTwitchEventRedeemRewardMaxPreStream max_per_stream;
+		bool should_redemptions_skip_request_queue;
 };
-
+USTRUCT(BlueprintType)
+struct FTwitchEventRedeemRedemption
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
+		FString id;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
+		FTwitchEventRedeemRedemptionUser user;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
+        FString redeemed_at;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
+        FTwitchEventRedeemReward reward;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
+        FString status;
+};
 USTRUCT(BlueprintType)
 struct FTwitchEventRedeemData
 {
@@ -202,23 +200,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
 		FString timestamp;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		FString channel_id;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		FString redeemed_at;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		FString user_input;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		FString status;
-
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
 		FTwitchEventRedeemRedemption redemption;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		FTwitchEventRedeemReward reward;
 };
-
 USTRUCT(BlueprintType)
 struct FTwitchEventRedeemMessage
 {
@@ -229,7 +212,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
 		FTwitchEventRedeemData data;
 };
-
+USTRUCT(BlueprintType)
+struct FTwitchEventRedeemSubRoot
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
+		FString topic;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
+		FTwitchEventRedeemMessage message;
+};
 USTRUCT(BlueprintType)
 struct FTwitchEventRedeemRoot
 {
@@ -238,9 +230,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
 		FString type;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
-		FTwitchEventRedeemMessage data;
+		FTwitchEventRedeemSubRoot data;
 };
-
 USTRUCT(BlueprintType)
 struct FTwitchEventRedeemDataRoot
 {
@@ -251,7 +242,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TwitchInteraction")
 		FTwitchEventRedeemData message;
 };
-
 USTRUCT(BlueprintType)
 struct FTwitchEventBitsBadge
 {
@@ -470,10 +460,8 @@ public:
 		FBitsEventReceived OnBitsEventReceived;
 	UPROPERTY(BlueprintAssignable, Category = "Message Events")
 		FBitsBadgeEventReceived OnBitsBadgeEventReceived;
-
 	UPROPERTY(BlueprintAssignable, Category = "Message Events")
 		FRedeemEventReceived OnRedeemEventReceived;
-
 	UPROPERTY(BlueprintAssignable, Category = "Message Events")
 		FSubscribeEventReceived OnSubscribeEventReceived;
 
