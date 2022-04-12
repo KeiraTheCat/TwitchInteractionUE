@@ -354,11 +354,12 @@ FString UTwitchChat::GetCommandString(const FString& _message, TArray<FString>& 
 	FString PrepString = _message.Mid(1, _message.Len() - 1);
 
 	PrepString.ParseIntoArray(outOptions, *OptionsCharacter);
-
-	FString command = outOptions[0];
-	outOptions.RemoveAt(0);
-
-	return command;
+	if (outOptions.Num() > 0) {
+		FString command = outOptions[0];
+		outOptions.RemoveAt(0);
+		return command;
+	}
+	return "";
 }
 
 void UTwitchChat::SetupCommandCharacters(const FString _commandChar, const FString _optionsChar)

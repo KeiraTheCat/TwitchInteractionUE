@@ -73,15 +73,15 @@ public class TwitchInteraction : ModuleRules
             PrivateIncludePaths.AddRange(
                 new string[] {
                     "TwitchInteraction/Private",
-                    "TwitchInteraction/Private/Win64",
-                    "TwitchInteraction/Private/Win64/include",
+                    //"TwitchInteraction/Private/Win64",
+                    //"TwitchInteraction/Private/Win64/include",
                     });
 
             PublicIncludePaths.AddRange(
                 new string[] {
                     Path.Combine(ModuleDirectory, "Private"),
-                    Path.Combine(ModuleDirectory, "Private/Win64"),
-                    Path.Combine(ModuleDirectory, "Private/Win64/include"),
+                    //Path.Combine(ModuleDirectory, "Private/Win64"),
+                    //Path.Combine(ModuleDirectory, "Private/Win64/include"),
                 });
         }
         else if (Target.Platform == UnrealTargetPlatform.Mac)
